@@ -1,9 +1,34 @@
-import {LayoutRoot, Navigation} from 'react-native-navigation';
+import {LayoutRoot, Navigation, Options} from 'react-native-navigation';
 import {BottomTabs} from '../../constants/enum';
 import {Application} from '../../modules/application/application';
 import {becomeActive} from '../../redux/application';
 import Screens from '../../screens/Screens';
+import {developmentAuthenticateLayout} from './layouts';
 
+export function startApplicationLogin(): void {
+  const layout = {...developmentAuthenticateLayout};
+  layout.root.stack?.children?.push({
+    component: {
+      name: Screens.LoginScreen,
+      options: {
+        statusBar: {
+          translucent: true,
+          drawBehind: true,
+          style: 'dark',
+          backgroundColor: 'transparent',
+        },
+        layout: {
+          componentBackgroundColor: 'yellow',
+        },
+        topBar: {
+          visible: false,
+          height: 0,
+        },
+      },
+    },
+  });
+  Navigation.setRoot(layout);
+}
 export function startWithApplication(application: Application): void {
   const layout: LayoutRoot = {
     root: {
@@ -84,3 +109,36 @@ export function startWithApplication(application: Application): void {
     application.store.dispatch(becomeActive());
   });
 }
+
+export const pushTo = (
+  stack: string,
+  screen: string,
+  passProps = {},
+  options?: Options,
+) => {
+  Navigation.push(stack, {
+    component: {
+      name: screen,
+      options: {
+        // layout: {
+        //   componentBackgroundColor: 'rgba(250, 250, 250, 1)',
+        // },
+        topBar: {
+          visible: false,
+          height: 0,
+        },
+        statusBar: {
+          style: 'dark',
+          hideWithTopBar: false,
+        },
+        bottomTabs: {
+          visible: false,
+        },
+        ...options,
+      },
+      passProps: {
+        ...passProps,
+      },
+    },
+  });
+};

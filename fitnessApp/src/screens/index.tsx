@@ -28,4 +28,14 @@ export const registerScreensWithApplication = (application: Application) => {
       </ApplicationProvider>
     ));
   });
+  Navigation.registerComponent(Screens.LoginScreen, () => {
+    const Login = require('./Login').default;
+    return gestureHandlerRootHOC(props => (
+      <ApplicationProvider application={application}>
+        <SafeAreaProvider>
+          <Login {...props} />
+        </SafeAreaProvider>
+      </ApplicationProvider>
+    ));
+  });
 };
